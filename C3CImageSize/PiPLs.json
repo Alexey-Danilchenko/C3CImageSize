@@ -1,0 +1,214 @@
+{
+    "PiPLs": [
+        {
+            "Kind": "Filter",
+            "Name": "C3C Image Size",
+            "Category": "**Hidden**",
+            "Version": 4,
+            "SubVersion": 0,
+
+            "CodeEntryPointWin64": "ENTRYPOINT",
+            "CodeMacARM64": "ENTRYPOINT",
+
+            "SupportedModes": {
+                "Bitmap": false,
+                "GrayScale": true,
+                "IndexedColor": false,
+                "RGBColor": true,
+                "CMYKColor": false,
+                "HSLColor": false,
+                "HSBColor": false,
+                "Multichannel": false,
+                "Duotone": false,
+                "LABColor": false
+            },
+            "EnableInfo": "in (PSHOP_ImageMode, GrayScaleMode, RGBMode, RGB48Mode) || PSHOP_ImageDepth == 16",
+            "PlugInMaxSize": [ 2000000, 2000000 ],
+            "FilterLayerSupport": true,
+            "FilterCaseInfo": [
+                {
+                    "InputHandling": "InStraightData",
+                    "OutputHandling": "OutStraightData",
+                    "WriteOutsideSelection": false,
+                    "FiltersLayerMasks": true,
+                    "WorksWithBlankData": true,
+                    "DontCopySourceToDestination": false
+                },
+                {
+                    "InputHandling": "InStraightData",
+                    "OutputHandling": "OutStraightData",
+                    "WriteOutsideSelection": false,
+                    "FiltersLayerMasks": true,
+                    "WorksWithBlankData": true,
+                    "DontCopySourceToDestination": false
+                },
+                {
+                    "InputHandling": "InStraightData",
+                    "OutputHandling": "OutStraightData",
+                    "WriteOutsideSelection": false,
+                    "FiltersLayerMasks": true,
+                    "WorksWithBlankData": true,
+                    "DontCopySourceToDestination": false
+                },
+                {
+                    "InputHandling": "InStraightData",
+                    "OutputHandling": "OutStraightData",
+                    "WriteOutsideSelection": false,
+                    "FiltersLayerMasks": true,
+                    "WorksWithBlankData": true,
+                    "DontCopySourceToDestination": false
+                },
+                {
+                    "InputHandling": "InStraightData",
+                    "OutputHandling": "OutStraightData",
+                    "WriteOutsideSelection": false,
+                    "FiltersLayerMasks": true,
+                    "WorksWithBlankData": true,
+                    "DontCopySourceToDestination": false
+                },
+                {
+                    "InputHandling": "InStraightData",
+                    "OutputHandling": "OutStraightData",
+                    "WriteOutsideSelection": false,
+                    "FiltersLayerMasks": true,
+                    "WorksWithBlankData": true,
+                    "DontCopySourceToDestination": false
+                },
+                {
+                    "InputHandling": "InStraightData",
+                    "OutputHandling": "OutStraightData",
+                    "WriteOutsideSelection": false,
+                    "FiltersLayerMasks": true,
+                    "WorksWithBlankData": true,
+                    "DontCopySourceToDestination": false
+                }
+            ],
+            "HasTerminology": {
+                "ClassID": "c3C1",
+                "EventID": "c3C1",
+                "ScopeString": "dcc0c3c0-8e6e-4cb9-98e7-7531bf0266c4"
+            },
+            "Terminology": {
+                "MajorVersion": 1,
+                "MinorVersion": 0,
+                "Language": 0,
+                "ScriptCode": 0,
+                "Suits": [
+                    {
+                        "SuitName": "C3C Filters",
+                        "SuitID": "c3C1",
+                        "SuitDescription": "C3CImageSize dictionary",
+                        "SuitLevel": 1,
+                        "SuitVersion": 1,
+
+                        "Events": [
+                            {
+                                "EventName": "C3C Image Size",
+                                "EventDescription": "C3C image resize plugin",
+                                "ClassID": "c3C1",
+                                "EventType": "c3C1",
+                                "ReplyType": "null",
+                                "DirectParamType": "#ImR",
+                                "DirectParamFlagBits": {
+                                    "DirectParamOptional": true,
+                                    "ListOfItems": false,
+                                    "Enumerated": true,
+                                    "ChangesState": true
+                                },
+                                "Parameters":
+                                [
+                                    {
+                                        "ParamName":"Pixel Width",
+                                        "ParamKeyword":"PixelWidth",
+                                        "ParamType":"integer",
+                                        "ParamDescription":"resizes width in pixels"
+                                    },
+                                    {
+                                        "ParamName":"Pixel Height",
+                                        "ParamKeyword":"PixelHeight",
+                                        "ParamType":"integer",
+                                        "ParamDescription":"resizes height in pixels"
+                                    },
+                                    {
+                                        "ParamName":"Width",
+                                        "ParamKeyword":"Width",
+                                        "ParamType":"integer",
+                                        "ParamDescription":"resize width"
+                                    },
+                                    {
+                                        "ParamName":"Height",
+                                        "ParamKeyword":"Height",
+                                        "ParamType":"integer",
+                                        "ParamDescription":"resize height"
+                                    },
+                                    {
+                                        "ParamName":"Sharpness",
+                                        "ParamKeyword":"SharpnessIndex",
+                                        "ParamType":"integer",
+                                        "ParamDescription":"sharpness index"
+                                    },
+                                    {
+                                        "ParamName":"Resize Units",
+                                        "ParamKeyword":"ResizeUnits",
+                                        "ParamType":"ResizeUnits",
+                                        "ParamDescription":"resize units",
+                                        "ParamFlagBits":
+                                        {
+                                            "Enumerated":true
+                                        }
+                                    },
+                                    {
+                                        "ParamName":"Resize Method",
+                                        "ParamKeyword":"ResizeMethod",
+                                        "ParamType":"ResizeMethod",
+                                        "ParamDescription":"resize algorithm",
+                                        "ParamFlagBits":
+                                        {
+                                            "Enumerated":true
+                                        }
+                                    }
+                                ]
+                            }
+                        ],
+
+                        "Enumerations":
+                        [
+                            {
+                                "EnumID":"ResizeUnits",
+                                "Enumerators":
+                                [
+                                    {
+                                        "EnumName":"pixels",
+                                        "EnumKeyword":"runitsPixels",
+                                        "EnumDescription":"pixel units"
+                                    },
+                                    {
+                                        "EnumName":"%",
+                                        "EnumKeyword":"runitsPercents",
+                                        "EnumDescription":"percents"
+                                    }
+                                ]
+                            },
+                            {
+                                "EnumID":"ResizeMethod",
+                                "Enumerators":
+                                [
+                                    {
+                                        "EnumName":"linear",
+                                        "EnumKeyword":"resizeLinear",
+                                        "EnumDescription":"C3C linear"
+                                    },
+                                    {
+                                        "EnumName":"linear with contrast",
+                                        "EnumKeyword":"resizeLinearContrast",
+                                        "EnumDescription":"C3C linear with contrast"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+// C3CImageSizeAutomate resource script
+//
+// Modern Photoshop plugins carry their PiPL as a JSON resource
+// named "JSON_PIPL" of type 'JSON' (see the SDK "PiPL Resources" docs).
+
+JSON_PIPL JSON "..\C3CImageSizeAutomate\PiPLs.json"
+
+// Plug-in icon (shown in the Photoshop menus and Windows Explorer)
+1 ICON "C3CImageSize.ico"

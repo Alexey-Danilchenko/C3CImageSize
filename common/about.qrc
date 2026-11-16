@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="C3CImageSize">
+    <file>images/C3CImageSize-32.png</file>
+    <file>images/C3CImageSize-48.png</file>
+    <file>images/C3CImageSize-256.png</file>
+  </qresource>
+</RCC>

@@ -1,0 +1,6 @@
+**/.vscode
+**/build
+**/build-debug
+**/bin
+**/*.code-workspace
+**/.DS_Store
