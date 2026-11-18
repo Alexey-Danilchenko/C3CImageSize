@@ -61,6 +61,13 @@ C:\Program Files\Adobe\Adobe Photoshop <version>\Presets\Scripts\
 
 **macOS**
 
+macOS Gatekeeper prevents downloaded plug-ins from being used. To allow them, open Terminal, go to the folder you unzipped (you can drag the folder into the Terminal window), and run the following commands:
+
+```
+xattr -cr C3CImageSize/C3CImageSize.plugin
+xattr -cr C3CImageSize/C3CImageSizeAutomate.plugin
+```
+
 Move the **C3CImageSize** folder (containing the **C3CImageSize.plugin** and **C3CImageSizeAutomate.plugin** bundles) to the **Adobe® Photoshop®** plug-ins folder:
 
 ```
