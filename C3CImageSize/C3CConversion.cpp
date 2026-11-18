@@ -7,11 +7,11 @@ void InitConversion(void)
 {
     RGB2Lab_info.infoSize = sizeof(RGB2Lab_info);
     RGB2Lab_info.selector = plugIncolorServicesConvertColor;
-    RGB2Lab_info.reservedSourceSpaceInfo = nil;
-    RGB2Lab_info.reservedResultSpaceInfo = nil;
+    RGB2Lab_info.reservedSourceSpaceInfo = nullptr;
+    RGB2Lab_info.reservedResultSpaceInfo = nullptr;
     RGB2Lab_info.colorComponents[3] = 0;
     RGB2Lab_info.resultGamutInfoValid = true;
-    RGB2Lab_info.reserved = nil;
+    RGB2Lab_info.reserved = nullptr;
     RGB2Lab_info.sourceSpace = plugIncolorServicesRGBSpace;
     RGB2Lab_info.resultSpace = plugIncolorServicesLabSpace;
 }

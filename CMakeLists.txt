@@ -143,8 +143,8 @@ copy_qt_plugins(C3CImageSizeAutomate)
 
 # The filter script is installed manually into Photoshop's Scripts folder
 # (see C3CImageSize/C3CImageSize2FilterScripting.jsx). Ship it next to the
-# plugins in bin/<build type> so the release archive contains the plugins
-# and the script.
+# plugins in bin/<build type>; the release workflow moves it into the
+# archive's Scripts/ folder.
 add_custom_target(C3CImageSize_filter_script ALL
     COMMAND ${CMAKE_COMMAND} -E copy
         ${CMAKE_SOURCE_DIR}/C3CImageSize/C3CImageSize2FilterScripting.jsx

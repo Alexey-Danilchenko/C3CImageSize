@@ -21,7 +21,7 @@ Build and installation instructions are in [INSTALL.md](INSTALL.md).
 | Dependency | Notes |
 |---|---|
 | CMake ≥ 3.17 | Tested with CMake 4.4.3 (Makefiles generator) |
-| Qt 6 (Core, Gui, Widgets, Network, Xml) | Tested with 6.11.0 |
+| Qt 6 (Core, Gui, Widgets, Network, Xml) | Tested with 6.12.0 |
 | Intel TBB | Tested with 12.17. On macOS, TBB 12 is arm64-only and requires macOS 15.0+. The build is pinned to `arm64` / `CMAKE_OSX_DEPLOYMENT_TARGET 15.0` |
 | Adobe Photoshop SDK (2025+) | Header-only. Located via `pluginsdk/samplecode/common/includes/PIDefines.h` (see `cmake/modules/FindPsSdk.cmake`) |
 | macOS | Xcode / Apple clang, Apple Silicon |
@@ -80,6 +80,6 @@ The include directories were the project dir, `..\common`, and the SDK's `sample
 
 - The macOS build works in Release and Debug. Codesign is clean and all dependencies are bundled.
 - The Windows path is best-effort. The IIQRemap reference app it mirrors is unverified on Windows too.
-- `C3CImageSize/C3CImageSize2FilterScripting.jsx` is a manual-install Photoshop script (placed in the Photoshop Scripts folder); the build copies it to `bin/<BuildType>/` alongside the plugins so the release archive ships the plugins and the script together.
+- `C3CImageSize/C3CImageSize2FilterScripting.jsx` is a manual-install Photoshop script (placed in the Photoshop Scripts folder); the build copies it to `bin/<BuildType>/` alongside the plugins. The release workflow reorganizes the archive into a `C3CImageSize/` folder (plugins, plus the dependent DLLs on Windows) and a `Scripts/` folder (the .jsx).
 - Legacy files not part of the CMake build: the `.r` PiPL scripts (see [Legacy PiPL (`.r`) files](#legacy-pipl-r-files)).
 - `build/`, `build-debug/` and `bin/` are git-ignored.

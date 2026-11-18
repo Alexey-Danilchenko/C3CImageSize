@@ -24,7 +24,7 @@ Q_IMPORT_PLUGIN (QCocoaIntegrationPlugin);
 #endif
 
 #if defined(Q_OS_WIN)
-#include <QWinWidget>
+#include "psnative.h"
 #if defined(_QT_STATIC_) && QT_VERSION >= 0x050000
 #include <QtPlugin>
 Q_IMPORT_PLUGIN (QWindowsIntegrationPlugin);
@@ -466,14 +466,15 @@ void DoUI(void)
 #else
     PlatformData* platform = (PlatformData*)param->platformData;
 
-    QWinWidget win((HWND)platform->hwnd);
-
-    C3CImageSize w(&win);
+    C3CImageSize w;
 
     w.setWindowFlags(Qt::Dialog | Qt::WindowTitleHint
                                 | Qt::CustomizeWindowHint
                                 | Qt::WindowCloseButtonHint
                                 | Qt::MSWindowsFixedSizeDialogHint);
+
+    // Embed the dialog in Photoshop's window (Qt 6 replacement for QWinWidget)
+    QWindow* nativeParent = embedInNativeWindow(w, (HWND)platform->hwnd);
 #endif
     w.show();
 
@@ -483,7 +484,17 @@ void DoUI(void)
     w.setFixedSize(w.size());
 #endif
 
+#if defined(Q_OS_WIN)
+    // Keep Photoshop's window disabled while the dialog is modal
+    // (the legacy QWinWidget did the same via EnableWindow)
+    EnableWindow((HWND)platform->hwnd, FALSE);
+#endif
     resultCode = (w.exec() == QDialog::Accepted) ? 0 : userCanceledErr;
+#if defined(Q_OS_WIN)
+    EnableWindow((HWND)platform->hwnd, TRUE);
+    // Safe: a foreign QWindow never destroys the wrapped native window
+    delete nativeParent;
+#endif
 }
 
 //-------------------------------------------------------------------------------

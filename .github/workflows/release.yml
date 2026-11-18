@@ -1,0 +1,216 @@
+name: Release
+
+# Builds the C3C Photoshop plugins for Windows and macOS (Apple Silicon) when
+# a release is published, and packages each platform's bin/Release contents as
+# C3CImageSize-<ver>.<platform>.zip (C3CImageSize-<ver>.win64.zip,
+# C3CImageSize-<ver>.macos.zip).
+# Each archive contains a C3CImageSize/ folder with the plugins (plus their
+# dependent DLLs on Windows) and a Scripts/ folder with the .jsx script.
+# GitHub generates the release source archives from the tag automatically.
+#
+# The packages are attached as assets to the published release (uploaded
+# directly by the release's database ID from the event payload, so no tag
+# lookup is needed). They are also kept as Actions artifacts as a fallback.
+#
+# Flow: push a tag, then create/publish a release for that tag. Publishing the
+# release is what triggers this workflow and attaches the binaries to it.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to package (defaults to the tag, then C3C_PLUGINS_VERSION in CMakeLists.txt)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  QT_VERSION: '6.12.0'
+  TBB_VERSION: '2022.3.0'
+  # Public mirror of the Adobe Photoshop C++ SDK (header-only API under pluginsdk/).
+  PS_SDK_REPO: 'https://github.com/AdobeDocs/photoshop-cpp-sdk.git'
+  # Pinned for reproducible builds; bump when the SDK changes.
+  PS_SDK_REF: '7e9aca4353a3d4615e9522f47521bf840fb4388c'
+
+jobs:
+  build:
+    name: Build ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            platform: win64
+          - os: macos-15 # Apple Silicon
+            platform: macos
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Resolve version
+        id: version
+        shell: bash
+        run: |
+          tag=""
+          if [ "${{ github.event_name }}" = "release" ]; then
+            tag="${{ github.event.release.tag_name }}"
+          fi
+          ver="${tag#v}"
+          if [ -z "$ver" ]; then
+            ver="${{ github.event.inputs.version }}"
+          fi
+          if [ -z "$ver" ]; then
+            ver="$(sed -n 's/.*set(C3C_PLUGINS_VERSION \([0-9][0-9.]*\)).*/\1/p' CMakeLists.txt | head -n 1)"
+          fi
+          if [ -z "$ver" ]; then
+            ver="dev"
+          fi
+          echo "version=$ver" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "Packaging version $ver (tag: ${tag:-<none>})"
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          cache: true
+          # The newest released aqtinstall (3.3.0, which this action pins by default)
+          # predates Qt's per-arch Windows repo layout (qt6_6120_msvc2022_64), so
+          # Windows installs of Qt >= 6.11 fail with "Failed to locate XML data".
+          # Point the action at aqtinstall master (pinned commit), which contains
+          # the fix. macOS works with the released 3.3.0 and is left unchanged.
+          aqtsource: ${{ matrix.platform == 'win64' && 'git+https://github.com/miurahr/aqtinstall@5a49f2b391ae8ee1d3c0dd87f8b33c1d49a4deb7' || '' }}
+
+      - name: Install TBB (Homebrew, arm64)
+        if: matrix.platform == 'macos'
+        run: |
+          brew install tbb
+          echo "TBB_DIR=$(brew --prefix tbb)" >> "$GITHUB_ENV"
+
+      - name: Download TBB (oneTBB prebuilt, x64)
+        if: matrix.platform == 'win64'
+        shell: pwsh
+        run: |
+          $url = "https://github.com/uxlfoundation/oneTBB/releases/download/v${env:TBB_VERSION}/oneapi-tbb-${env:TBB_VERSION}-win.zip"
+          Invoke-WebRequest -Uri $url -OutFile tbb.zip
+          Expand-Archive -Path tbb.zip -DestinationPath tbb
+          $tbbDir = (Get-ChildItem -Path .\tbb -Directory | Select-Object -First 1).FullName
+          Add-Content -Path $env:GITHUB_ENV -Value "TBB_DIR=$tbbDir"
+
+      - name: Fetch Photoshop SDK
+        shell: bash
+        run: |
+          git clone --depth 1 "${PS_SDK_REPO}" psdk
+          git -C psdk fetch --depth 1 origin "${PS_SDK_REF}"
+          git -C psdk checkout --detach "${PS_SDK_REF}"
+          # On Windows this step runs in Git Bash, where pwd() returns an MSYS
+          # path (/d/a/...) that CMake cannot use; convert it to a native
+          # Windows path (cygpath is absent on macOS, where pwd is fine).
+          if command -v cygpath >/dev/null; then
+            sdk_dir="$(cygpath -m "$(cd psdk && pwd)")"
+          else
+            sdk_dir="$(cd psdk && pwd)"
+          fi
+          echo "PS_SDK_DIR=$sdk_dir" >> "$GITHUB_ENV"
+
+      - name: Configure (macOS)
+        if: matrix.platform == 'macos'
+        run: |
+          cmake -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH="$QT_ROOT_DIR:$TBB_DIR:$PS_SDK_DIR"
+
+      - name: Configure (Windows)
+        if: matrix.platform == 'win64'
+        shell: pwsh
+        run: |
+          cmake -B build -DCMAKE_PREFIX_PATH="$env:QT_ROOT_DIR;$env:TBB_DIR;$env:PS_SDK_DIR"
+
+      - name: Build
+        run: cmake --build build --config Release -j
+
+      - name: Package (macOS)
+        if: matrix.platform == 'macos'
+        run: |
+          # Archive layout: C3CImageSize/ holds the plugins, Scripts/ the .jsx
+          rm -rf staging
+          mkdir -p staging/C3CImageSize staging/Scripts
+          cp -R bin/Release/. staging/C3CImageSize/
+          mv staging/C3CImageSize/C3CImageSize2FilterScripting.jsx staging/Scripts/
+          find staging -name .DS_Store -delete
+          (cd staging && zip -r -y -X "../C3CImageSize-${{ steps.version.outputs.version }}.${{ matrix.platform }}.zip" .)
+          unzip -l "C3CImageSize-${{ steps.version.outputs.version }}.${{ matrix.platform }}.zip" | tail -n 3
+
+      - name: Package (Windows)
+        if: matrix.platform == 'win64'
+        shell: pwsh
+        run: |
+          # Archive layout: C3CImageSize/ holds the plugins, Scripts/ the .jsx
+          $stage = Join-Path $env:GITHUB_WORKSPACE 'staging'
+          Remove-Item -Recurse -Force $stage -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Path "$stage/C3CImageSize", "$stage/Scripts" | Out-Null
+          Copy-Item -Path 'bin/Release/*' -Destination "$stage/C3CImageSize" -Recurse
+          # MSVC emits import libraries (.lib) and export files (.exp) next to
+          # the plugin DLLs; Photoshop only needs the .8bf plugins and their
+          # dependent DLLs
+          Get-ChildItem -Path $stage -Recurse -Include *.lib, *.exp | Remove-Item -Force
+          Move-Item "$stage/C3CImageSize/C3CImageSize2FilterScripting.jsx" "$stage/Scripts/"
+          $zip = "C3CImageSize-${{ steps.version.outputs.version }}.${{ matrix.platform }}.zip"
+          Compress-Archive -Path "$stage/*" -DestinationPath $zip
+          Get-ChildItem $stage -Recurse
+          Get-Item $zip
+
+      - name: Upload artifact
+        # archive: false (v7+) uploads the zip file itself as the artifact,
+        # so it is byte-identical to the release asset instead of a zip-in-zip
+        uses: actions/upload-artifact@v7
+        with:
+          path: C3CImageSize-${{ steps.version.outputs.version }}.${{ matrix.platform }}.zip
+          archive: false
+
+      - name: Upload to GitHub release
+        # Only for release events: the release is guaranteed to exist, so the
+        # upload must not be gated on a lookup that can silently fail.
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          zip="C3CImageSize-${{ steps.version.outputs.version }}.${{ matrix.platform }}.zip"
+          name="$(basename "$zip")"
+          # Release assets must be uploaded to the release's upload_url, which
+          # points at uploads.github.com (e.g.
+          # https://uploads.github.com/repos/{owner}/{repo}/releases/{id}/assets{?name,label}).
+          # POSTing to api.github.com/.../releases/{id}/assets returns 404.
+          # upload_url comes from the event payload, so no release lookup is
+          # needed. Retry a few times to ride out any transient API lag right
+          # after publication, and fail loudly if the upload does not succeed
+          # so a missing asset is never silently swallowed.
+          upload_url="${{ github.event.release.upload_url }}"
+          url="${upload_url/\{\?name,label\}/?name=$name}"
+          for attempt in 1 2 3 4 5; do
+            if curl -sS -f \
+                -H "Authorization: Bearer ${GH_TOKEN}" \
+                -H "Content-Type: application/zip" \
+                -X POST \
+                "$url" \
+                --data-binary @"$zip"; then
+              echo "Uploaded $zip to release"
+              exit 0
+            fi
+            echo "::warning::Upload attempt ${attempt} for $zip failed; retrying in 30s..."
+            sleep 30
+          done
+          echo "::error::Failed to upload $zip to $url after 5 attempts"
+          exit 1

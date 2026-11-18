@@ -17,14 +17,8 @@ foreach(_plugin C3CImageSize C3CImageSizeAutomate)
         INCLUDE Qt6::QWindowsIntegrationPlugin
     )
 
-    target_sources(${_plugin} PRIVATE
-        qwinwidget.h
-        qwinwidget.cpp
-    )
-
-    # Qt 6 no longer ships QWinWidget, so the plugins use the local
-    # win/qwinwidget.h implementation; make it resolvable from the
-    # plugin sources (e.g. #include <QWinWidget> in main.cpp)
+    # win/psnative.h (Qt 6 replacement for the legacy QWinWidget) is
+    # included by the plugin sources; make it resolvable
     target_include_directories(${_plugin} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 endforeach()
 

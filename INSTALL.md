@@ -33,12 +33,12 @@ per-user install), keeping the layout intact, then restart Photoshop.
 ```sh
 # Release
 cmake -B build -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_PREFIX_PATH="/Users/dalex/Qt/6.11.0/macos:/Users/dalex/Development/TBB:/Users/dalex/Development/photoshopsdk"
+  -DCMAKE_PREFIX_PATH="/Users/dalex/Qt/6.12.0/macos:/Users/dalex/Development/TBB:/Users/dalex/Development/photoshopsdk"
 cmake --build build -j 8
 
 # Debug (separate build directory)
 cmake -B build-debug -DCMAKE_BUILD_TYPE=Debug \
-  -DCMAKE_PREFIX_PATH="/Users/dalex/Qt/6.11.0/macos:/Users/dalex/Development/TBB:/Users/dalex/Development/photoshopsdk"
+  -DCMAKE_PREFIX_PATH="/Users/dalex/Qt/6.12.0/macos:/Users/dalex/Development/TBB:/Users/dalex/Development/photoshopsdk"
 cmake --build build-debug -j 8
 ```
 
