@@ -2,7 +2,9 @@
 <img alt="C3CImageSize Plugin" src="common/images/C3CImageSize-128.png" align="right">
 
 **C3C Image Size** performs high-quality downsizing of raster images. The plug-in is designed for **Adobe Photoshop®**
-and works in **Windows** and **macOS** operating systems.
+and works in **Windows** and **macOS** operating systems. The downsize is essentially linear-light area-resampling filter
+with luminance-domain sharpening and optional contrast restoration, wrapped by an automation plugin that resizes the layer
+and then the document canvas.
 
 The plugin sources are released in memory of the original author, Sergey Sverdlov, and are maintained and enhanced
 by Alexey Danilchenko.

@@ -50,9 +50,9 @@ Q_IMPORT_PLUGIN (QWindowsIntegrationPlugin);
 // -30109 - Lab 48
 // -30110 - CMYK 64
 // -30111 - program error
-// -30905 - несовместим с версией ФШ
-// -30910 - проблемы с интерфейсом
-// -30910 - не поддерживает сервисы
+// -30905 - incompatible with Photoshop version
+// -30910 - interface problems
+// -30910 - does not support services
 
 
 //-------------------------------------------------------------------------------
@@ -239,7 +239,7 @@ void DoPrepare(void)
 {
     const void* suite;
 
-    // Запросим ColorSpaceSuite
+    // Acquire ColorSpaceSuite
     int Err = param->sSPBasic->AcquireSuite(kPSColorSpaceSuite, kPSColorSpaceSuiteVersion1, &suite);
 
     if (Err != 0)
@@ -273,7 +273,7 @@ void DoPrepare(void)
         {
             Lr = 0.29734;
             Lg = 0.62736;
-            Lb = 0.07530; // Lb = 0.07529; в стандарте, но там сумма = 0.99999
+            Lb = 0.07530; // Lb = 0.07529 in the standard, but then the sum = 0.99999
         }
         else
         {
