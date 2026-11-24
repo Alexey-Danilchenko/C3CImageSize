@@ -16,7 +16,7 @@ void InitConversion(void)
     RGB2Lab_info.resultSpace = plugIncolorServicesLabSpace;
 }
 
-void GetLab(int16 red, int16 green, int16 blue, int16 &L, int16 &a, int16&b)
+void GetLab(int16 red, int16 green, int16 blue, int16 &L, int16 &a, int16 &b)
 {
     RGB2Lab_info.colorComponents[0] = red;
     RGB2Lab_info.colorComponents[1] = green;

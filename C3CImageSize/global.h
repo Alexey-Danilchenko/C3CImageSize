@@ -14,8 +14,8 @@
 
 #define   MAX8 255
 #define   MAX16 32768
-#define   SIZE8 (MAX8+1)
-#define   SIZE16 (MAX16+1)
+#define   SIZE8 (MAX8 + 1)
+#define   SIZE16 (MAX16 + 1)
 
 #define AdobeRGB 0
 #define sRGB 1

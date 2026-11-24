@@ -220,7 +220,8 @@ SPErr Execute(void* parameters)
     // invoke filter plugin and read results
     gError = PlayeventFilter(actionParams->playInfo, resizeParams, returnParams);
 
-    if (!gError) {
+    if (!gError)
+    {
         // if scripting results failed to be passed in - get it from registry
         if (returnParams.pixelResizeWidth <= 0 || returnParams.pixelResizeHeight <= 0)
             gError = ReadRegister(returnParams.pixelResizeWidth, returnParams.pixelResizeHeight);

@@ -22,29 +22,29 @@ inline float sRGB2Lin(float c)
         return pow(c, 2.19921875f);
     else
     {
-        if (c<=0.04045f)
-            return c/12.92f;
+        if (c <= 0.04045f)
+            return c / 12.92f;
         else
-            return pow((c+0.055f)/1.055f, 2.4f);
+            return pow((c + 0.055f) / 1.055f, 2.4f);
     }
 }
 
 inline float Lin2sRGB(float c)
 {
     if (glSpace == AdobeRGB)
-        return pow(c, 1.0f/2.19921875f);
+        return pow(c, 1.0f / 2.19921875f);
     else
     {
-        if (c<=0.0031308f)
-            return 12.92f*c;
+        if (c <= 0.0031308f)
+            return 12.92f * c;
         else
-            return 1.055f*pow(c, 1.0f/2.4f)-0.055f;
+            return 1.055f * pow(c, 1.0f / 2.4f) - 0.055f;
     }
 }
 
 inline float Lf2f(float R, float G, float B)
 {
-    return Lr*R + Lg*G + Lb*B;
+    return Lr * R + Lg * G + Lb * B;
 }
 
 #endif

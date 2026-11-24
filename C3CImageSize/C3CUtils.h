@@ -15,32 +15,32 @@ inline void freeArray(float** &a, int n);
 
 inline int ROUND(float x)
 {
-   return (int)(x+0.5f);
+   return (int)(x + 0.5f);
 }
 
 inline int ROUND(double x)
 {
-   return (int)(x+0.5);
+   return (int)(x + 0.5);
 }
 
 inline int ROUNDI(float x)
 {
-   return (int)(x+0.5f);
+   return (int)(x + 0.5f);
 }
 
 inline int ROUNDI(double x)
 {
-   return (int)(x+0.5);
+   return (int)(x + 0.5);
 }
 
 inline int roundi(float x)
 {
-   return (int)floor(x+0.5f);
+   return (int)floor(x + 0.5f);
 }
 
 inline int roundi(double x)
 {
-   return (int)floor(x+0.5);
+   return (int)floor(x + 0.5);
 }
 
 inline void Assert(bool B, const char* message)
@@ -56,7 +56,7 @@ inline float** newArray(int n, int m)
 {
     float** a = new float*[n];
 
-    for (int i=0; i<n; i++)
+    for (int i = 0; i < n; i++)
     {
         a[i] = nullptr;
         try
@@ -75,7 +75,7 @@ inline float** newArray(int n, int m)
 
 inline void freeArray(float** &a, int n)
 {
-    for(int i=0; i<n; i++)
+    for(int i = 0; i < n; i++)
         if (a[i])
             delete [] a[i];
     delete [] a;

@@ -63,22 +63,22 @@ void InitData(FilterRecordPtr param)
     {
         case plugInModeRGBColor:
             glMAX = MAX8;
-            glAlignWidth = glInRowBytes/glPlanes;
+            glAlignWidth = glInRowBytes / glPlanes;
             CalcFixedCurves(glMAX);
             break;
         case plugInModeGrayScale:
             glMAX = MAX8;
-            glAlignWidth = glInRowBytes/glPlanes;
+            glAlignWidth = glInRowBytes / glPlanes;
             CalcFixedCurves(glMAX);
             break;
         case plugInModeRGB48:
             glMAX = MAX16;
-            glAlignWidth = glInRowBytes/glPlanes/2;
+            glAlignWidth = glInRowBytes / glPlanes / 2;
             CalcFixedCurves(glMAX);
             break;
         case plugInModeGray16:
             glMAX = MAX16;
-            glAlignWidth = glInRowBytes/glPlanes/2;
+            glAlignWidth = glInRowBytes / glPlanes / 2;
             CalcFixedCurves(glMAX);
             break;
         default:
@@ -96,7 +96,7 @@ int16 getResultCode(const char* inErrorString)
     if (pErrorString != nullptr && (strlen(inErrorString) < 256))
     {
         *pErrorString = (char)strlen(inErrorString);
-        memcpy(pErrorString+1, inErrorString, (unsigned char)(*pErrorString));
+        memcpy(pErrorString + 1, inErrorString, (unsigned char)(*pErrorString));
     }
     return resultCode;
 }
@@ -118,8 +118,8 @@ void CalculateNewSize(
     }
     else
     {
-        pixelWidth = roundi((float)params.resizeWidth/100.0f*imageWidth);
-        pixelHeight = roundi((float)params.resizeHeight/100.0f*imageHeight);
+        pixelWidth = roundi((float)params.resizeWidth / 100.0f * imageWidth);
+        pixelHeight = roundi((float)params.resizeHeight / 100.0f * imageHeight);
     }
 
     if (imageWidth <= 0 || imageHeight <= 0 || pixelWidth <= 0 || pixelHeight <= 0)
@@ -146,17 +146,17 @@ void CalculateNewSize(
     }
     else if (params.fitTo)
     {
-        if (pixelWidth*imageHeight < pixelHeight*imageWidth)
+        if (pixelWidth * imageHeight < pixelHeight * imageWidth)
         {
             // Fit to Width
             *resWidth = pixelWidth;
-            *resHeight = ROUNDI((float)pixelWidth/imageWidth*imageHeight);
+            *resHeight = ROUNDI((float)pixelWidth / imageWidth * imageHeight);
         }
         else
         {
             // Fit to Height
             *resHeight = pixelHeight;
-            *resWidth = ROUNDI((float)pixelHeight/imageHeight*imageWidth);
+            *resWidth = ROUNDI((float)pixelHeight / imageHeight * imageWidth);
         }
     }
     else

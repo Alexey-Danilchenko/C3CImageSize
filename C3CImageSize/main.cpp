@@ -175,23 +175,28 @@ int16 CheckParameters()
         resultCode = filterBadMode;
         return resultCode;
     }
-    //else if (param->documentInfo->imageMode == plugInModeMultichannel) {
+    //else if (param->documentInfo->imageMode == plugInModeMultichannel)
+    //{
     //    resultCode = getResultCode("cannot resize multichannel image");
     //    return resultCode;
-    //    }
-    //else if (param->documentInfo->alphaChannels) {
+    //}
+    //else if (param->documentInfo->alphaChannels)
+    //{
     //    resultCode = getResultCode("image has extra alpha channels");
     //    return resultCode;
-    //    }
-    //else if (param->documentInfo->layersDescriptor) {
+    //}
+    //else if (param->documentInfo->layersDescriptor)
+    //{
     //    resultCode = getResultCode("image has several layers");
     //    return resultCode;
-    //    }
-    //else if (param->imageMode != param->documentInfo->imageMode) {
+    //}
+    //else if (param->imageMode != param->documentInfo->imageMode)
+    //{
     //    resultCode = getResultCode("cannot resize a single channel");
     //    return resultCode;
-    //    }
-    //else if (param->documentInfo->selection) {
+    //}
+    //else if (param->documentInfo->selection)
+    //{
     //    resultCode = getResultCode("image has a selection");
     //    return resultCode;
     //}

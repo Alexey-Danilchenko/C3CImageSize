@@ -158,7 +158,7 @@ C3CImageSize::C3CImageSize(QWidget *parent, Qt::WindowFlags flags)
     else
         ui.linkLabel->hide();
 
-    for (int i = 0; i<PRESET_NUM; ++i)
+    for (int i = 0; i < PRESET_NUM; ++i)
     {
         presets[i].Init();
         presets[i].paramsOk = true;
@@ -319,7 +319,7 @@ void C3CImageSize::setConstrain(bool checked)
         ui.heightSpinBox->blockSignals(true);
 
         if (ui.widthUnitComboBox->currentIndex() == PIXELS)
-            ui.heightSpinBox->setValue(roundi((float)ui.widthSpinBox->value()/glWidth*glHeight));
+            ui.heightSpinBox->setValue(roundi((float)ui.widthSpinBox->value() / glWidth * glHeight));
         else
             ui.heightSpinBox->setValue(ui.widthSpinBox->value());
 
@@ -389,12 +389,12 @@ void C3CImageSize::setWidthUnit(int unit)
     if (unit == PIXELS)
     { //PERCENT to PIXELS
         ui.widthSpinBox->setSingleStep(100);
-        ui.widthSpinBox->setValue(roundi(ui.widthSpinBox->value()/100.0*glWidth));
+        ui.widthSpinBox->setValue(roundi(ui.widthSpinBox->value() / 100.0 * glWidth));
     }
     else
     { //PIXELS to PERCENT
         ui.widthSpinBox->setSingleStep(1);
-        ui.widthSpinBox->setValue(roundi(ui.widthSpinBox->value()*100.0/glWidth));
+        ui.widthSpinBox->setValue(roundi(ui.widthSpinBox->value() * 100.0 / glWidth));
     }
 
     SetMaximumWidth();
@@ -417,13 +417,13 @@ void C3CImageSize::setHeightUnit(int unit)
     if (unit == PIXELS)
     { //PERCENT to PIXELS
         ui.heightSpinBox->setSingleStep(100);
-        ui.heightSpinBox->setValue(roundi(ui.heightSpinBox->value()/100.0*glHeight));
+        ui.heightSpinBox->setValue(roundi(ui.heightSpinBox->value() / 100.0 * glHeight));
         SetMaximumHeight();
     }
     else
     { //PIXELS to PERCENT
         ui.heightSpinBox->setSingleStep(1);
-        ui.heightSpinBox->setValue(roundi(ui.heightSpinBox->value()*100.0/glHeight));
+        ui.heightSpinBox->setValue(roundi(ui.heightSpinBox->value() * 100.0 / glHeight));
     }
 
     SetMaximumHeight();
@@ -444,7 +444,7 @@ void C3CImageSize::setWidth(int w)
             if (ui.heightUnitComboBox->currentIndex() == PIXELS)
             {
                 ui.heightSpinBox->blockSignals(true);
-                ui.heightSpinBox->setValue(roundi((float)w/glWidth*glHeight));
+                ui.heightSpinBox->setValue(roundi((float)w / glWidth * glHeight));
                 ui.heightSpinBox->blockSignals(false);
             }
             else
@@ -461,21 +461,21 @@ void Normalize(double x, double &d, int &n, QString &suffix, int &precision)
 {
     n = 0;
     d = x;
-    while (d>1000)
+    while (d > 1000)
     {
-        d = d/1024;
+        d = d / 1024;
         n++;
     }
 
-    if (n==0)
+    if (n == 0)
         suffix = "b";
-    else if (n==1)
+    else if (n == 1)
         suffix = "K";
-    else if (n==2)
+    else if (n == 2)
         suffix = "M";
-    else if (n==3)
+    else if (n == 3)
         suffix = "G";
-    else if (n==4)
+    else if (n == 4)
         suffix = "T";
 
     if (n == 0)
@@ -499,8 +499,8 @@ void C3CImageSize::setDimensions(void)
     else
         sizeOf = 2;
 
-    double dNew = newWidth*newHeight*glPlanes*sizeOf;
-    double dOld = glWidth*glHeight*glPlanes*sizeOf;
+    double dNew = newWidth * newHeight * glPlanes * sizeOf;
+    double dOld = glWidth * glHeight * glPlanes * sizeOf;
 
     double d;
     int n;
@@ -532,7 +532,7 @@ void C3CImageSize::setHeight(int h)
             if (ui.widthUnitComboBox->currentIndex() == PIXELS)
             {
                 ui.widthSpinBox->blockSignals(true);
-                ui.widthSpinBox->setValue(roundi((float)h/glHeight*glWidth));
+                ui.widthSpinBox->setValue(roundi((float)h / glHeight * glWidth));
                 ui.widthSpinBox->blockSignals(false);
             }
             else
@@ -720,7 +720,7 @@ void C3CImageSize::showEvent(QShowEvent *event)
         ReadUIfromRegister();
 
     double v = ui.widthSpinBox->value();
-    ui.widthSpinBox->setValue(v-0.01);
+    ui.widthSpinBox->setValue(v - 0.01);
     ui.widthSpinBox->setValue(v);
 
     double h = ui.heightSpinBox->value();
